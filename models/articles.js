@@ -25,4 +25,4 @@ const articleSchema = new Schema({
 
 const scrapedData = mongoose.model("scrapedData", articleSchema);
 
-module.exports = Articles;
+module.exports = scrapedData;
