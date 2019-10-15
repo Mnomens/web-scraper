@@ -5,7 +5,7 @@ const cheerio = require("cheerio");
 const db = require("../models");
 
 // Define API routes here
-router.get("/scrape", function(req, res) {
+router.get("/scrape.html", function(req, res) {
     // First, we grab the body of the html with axios
     axios.get("https://www.nytimes.com/section/books").then(function(response) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
@@ -57,7 +57,7 @@ router.get("/scrape", function(req, res) {
 //router.put
   
 // Route for getting all saved scrapedData from the db
-router.get("/saved-articles", function(req, res) {
+router.get("/saved.html", function(req, res) {
     db.scrapedData.find({saved: true})
         .then(function(dbscrapedData) {
         // If we were able to successfully find scrapedData, send them back to the client
