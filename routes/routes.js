@@ -5,8 +5,9 @@ const cheerio = require("cheerio");
 const db = require("../models");
 
 // Define API routes here
-router.get("/scrape.html", function(req, res) {
+router.get("/scrape", function(req, res) {
     // First, we grab the body of the html with axios
+    console.log("Scraping...");
     axios.get("https://www.nytimes.com/section/books").then(function(response) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       let $ = cheerio.load(response.data);
@@ -41,6 +42,9 @@ router.get("/scrape.html", function(req, res) {
           .then(function(dbscrapedData) {
             // View the added result in the console
             console.log(dbscrapedData);
+             // Send a message to the client
+            res.send("Scrape complete");
+            displayData();
           })
           .catch(function(err) {
             // If an error occurred, log it
@@ -48,8 +52,20 @@ router.get("/scrape.html", function(req, res) {
           });
       });
   
-        // Send a message to the client
-        res.send("Scrape Complete");
+       
+    });
+});
+
+
+router.get("/articles", function(req, res) {
+    db.scrapedData.find({})
+        .then(function(dbscrapedData) {
+        // If we were able to successfully find scrapedData, send them back to the client
+        res.json(dbscrapedData);
+        })
+        .catch(function(err) {
+        // If an error occurred, send it to the client
+        res.json(err);
     });
 });
 
@@ -57,7 +73,7 @@ router.get("/scrape.html", function(req, res) {
 //router.put
   
 // Route for getting all saved scrapedData from the db
-router.get("/saved.html", function(req, res) {
+router.get("/saved", function(req, res) {
     db.scrapedData.find({saved: true})
         .then(function(dbscrapedData) {
         // If we were able to successfully find scrapedData, send them back to the client
